@@ -8,3 +8,4 @@ fpdf
 pdfplumber
 img2pdf
 tabula
+pandas
