@@ -5,7 +5,7 @@ pdf2docx
 pdf2pptx
 pillow
 fpdf
-pdfplumber
 img2pdf
 tabula
 pandas
+pdfplumber
