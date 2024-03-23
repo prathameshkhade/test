@@ -6,4 +6,4 @@ pdf2pptx
 pillow
 fpdf
 pdfplumber
-image2pdf
+img2pdf
