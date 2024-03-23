@@ -7,3 +7,4 @@ pillow
 fpdf
 pdfplumber
 img2pdf
+tabula
