@@ -1,3 +1,5 @@
+numpy
+pandas
 django
 py
 docx
@@ -7,5 +9,4 @@ pillow
 fpdf
 img2pdf
 tabula
-pandas
 pdfplumber
