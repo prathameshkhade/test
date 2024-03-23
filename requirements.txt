@@ -1,0 +1,8 @@
+py
+docx
+pdf2docx
+pdf2pptx
+pillow
+fpdf
+pdfplumber
+image2pdf

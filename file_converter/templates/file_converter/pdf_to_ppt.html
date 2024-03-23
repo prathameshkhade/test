@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF to DOCX Converter</title>
+    <style>
+        /* Style for the file upload form */
+        .upload-form {
+            margin: 50px auto;
+            width: 50%;
+            text-align: center;
+        }
+
+        /* Style for the download button */
+        .download-btn {
+            display: none; /* Initially hidden */
+            margin-top: 20px;
+            font-size: 16px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<div class="upload-form">
+    <h2>PDF to PPT Converter</h2>
+    <form id="PPTX-upload-form" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="file" name="pdf_file" accept=".pdf" required>
+        <button type="submit">Convert to PPT</button>
+    </form>
+    <button id="download-btn" class="download-btn">Download PPT</button>
+</div>
+
+<script>
+// Function to handle form submission and AJAX request
+document.getElementById("PPTX-upload-form").addEventListener("submit", function(event) {
+    event.preventDefault(); // Prevent default form submission
+
+    // Create FormData object to send the file via AJAX
+    var formData = new FormData(this);
+
+    // Send AJAX request to the server
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "{% url 'pdf_to_ppt' %}", true);
+    xhr.onload = function() {
+        if (xhr.status >= 200 && xhr.status < 300) { // Check for successful status codes
+            // On success, display download button and save docxPath
+            var responseData = JSON.parse(xhr.responseText);
+            console.log(responseData);
+            document.getElementById("download-btn").style.display = "block";
+            var pptxPath = responseData.pptx_path; // Save the docxPath
+            var tempDir = responseData.temp_dir; // Save the tempDir
+            console.log(pptxPath);
+            document.getElementById("download-btn").addEventListener("click", function() {
+                console.log("Entering download function");
+                // Construct download URL
+                var downloadUrl = "{% url 'download_file' %}?file_path=" + encodeURIComponent(pptxPath);
+                // Initiate file download
+                window.location.href = downloadUrl;
+                // Trigger cleanup after a delay (adjust as needed)
+                setTimeout(function() {
+                    cleanupTempDir(tempDir);
+                }, 5000); // 5 seconds delay (adjust as needed)
+            });
+        } else {
+            // On failure, display error message
+            alert("Error: " + JSON.parse(xhr.responseText).error);
+        }
+    };
+    xhr.send(formData);
+});
+
+// Function to trigger temporary directory cleanup
+function cleanupTempDir(tempDir) {
+    // Send AJAX request to trigger cleanup
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "{% url 'cleanup_temp_dir' %}?temp_dir=" + encodeURIComponent(tempDir), true);
+    xhr.onload = function() {
+        if (xhr.status >= 200 && xhr.status < 300) {
+            console.log("Temporary directory cleaned up successfully.");
+        } else {
+            console.error("Failed to clean up temporary directory.");
+        }
+    };
+    xhr.send();
+}
+</script>
+
+</body>
+</html>
