@@ -9,3 +9,5 @@ pdf2pptx==1.0.5
 pdfplumber==0.11.0
 pillow==10.2.0
 tabula-py
+gunicorn==21.2.0
+whiterose==0.1.6
